@@ -1,3 +1,3 @@
 ### tffn-search-service
 
-* Microservice for all tffn data.
+* Microservice for all tffn data
