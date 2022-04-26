@@ -2,8 +2,6 @@ package com.tiff.tffnserachservice.model;
 
 import lombok.Data;
 
-import java.time.DayOfWeek;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -31,11 +29,9 @@ public class Tiffner {
     public String address;
     public List<String> tags;
     public List<String> reviews;
-    public Date daysOfOperation;
+    public BusinessHours businessHours;
     public String description;
     public String rating;
     public int price;
-
-
 
 }
