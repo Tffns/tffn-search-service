@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface TiffnerRepository extends JpaRepository<Tiffner,Long> {
 
-    Optional<Tiffner> findTiffnerById(long id);
-    Optional<Tiffner> findTiffnerByName(String name);
+    Optional<Tiffner> findByTiffnerId(Long id);
+    Optional<Tiffner> findByName(String name);
 }

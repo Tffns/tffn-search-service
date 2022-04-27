@@ -13,12 +13,13 @@ public class TiffnerService {
     @Autowired
     private TiffnerRepository tiffnerRepository;
 
-    public Optional<Tiffner> findTiffnerById(Long id){
-        return tiffnerRepository.findTiffnerById(id);
+
+    public Optional<Tiffner> findByTiffnerId(Long id){
+        return tiffnerRepository.findByTiffnerId(id);
     }
 
-    public Optional<Tiffner> findTiffnerByName(String name){
-        return tiffnerRepository.findTiffnerByName(name);
+    public Optional<Tiffner> findByTiffnerName(String name){
+        return tiffnerRepository.findByName(name);
     }
 
 }
