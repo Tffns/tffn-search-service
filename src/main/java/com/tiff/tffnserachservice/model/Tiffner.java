@@ -2,6 +2,9 @@ package com.tiff.tffnserachservice.model;
 
 import lombok.Data;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.List;
 
 @Data
@@ -21,11 +24,18 @@ public class Tiffner {
         7. Description - String
         8. Rating - List of Stars
         9. Price - 1-4 Integers
+        11. id - generated
         TODO:
             10. thumbnail -  Byte
      */
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long tiffnerId;
+
     public String name;
-    public ContactInformation contactInformation;
+    public String phoneNumber;
+    public String emailAddress;
     public String address;
     public List<String> tags;
     public List<String> reviews;
