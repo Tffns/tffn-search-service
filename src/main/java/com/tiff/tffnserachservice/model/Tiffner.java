@@ -2,12 +2,12 @@ package com.tiff.tffnserachservice.model;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
+@Entity
+@Table(name="test")
 public class Tiffner {
     /*
         1. Name - String
@@ -31,17 +31,28 @@ public class Tiffner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long tiffnerId;
+    public Long tiffnerId;
 
     public String name;
-    public String phoneNumber;
-    public String emailAddress;
+
+    @Embedded
+    public ContactInformation contactInformation;
+
     public String address;
+
+    @ElementCollection
     public List<String> tags;
+
+    @ElementCollection
     public List<String> reviews;
-    public BusinessHours businessHours;
+
+    @Embedded
+    private BusinessHours businessHours;
+
     public String description;
+
     public String rating;
+
     public int price;
 
 }
