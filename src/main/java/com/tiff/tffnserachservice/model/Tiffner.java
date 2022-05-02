@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name="test")
+@Table(name="tffns")
 public class Tiffner {
     /*
         1. Name - String
@@ -31,28 +31,28 @@ public class Tiffner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long tiffnerId;
+    private Long tiffnerId;
 
-    public String name;
+    private String name;
 
     @Embedded
-    public ContactInformation contactInformation;
+    private ContactInformation contactInformation;
 
-    public String address;
-
-    @ElementCollection
-    public List<String> tags;
+    private String address;
 
     @ElementCollection
-    public List<String> reviews;
+    private List<String> tags;
+
+    @ElementCollection
+    private List<String> reviews;
 
     @Embedded
     private BusinessHours businessHours;
 
-    public String description;
+    private String description;
 
-    public String rating;
+    private String rating;
 
-    public int price;
+    private int price;
 
 }
