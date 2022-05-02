@@ -25,7 +25,7 @@ public class TiffnerDTO {
 
     private String rating;
 
-    private double price;
+    private int price;
 
 
 
