@@ -4,11 +4,15 @@ package com.tiff.tffnserachservice.controller;
 import com.tiff.tffnserachservice.dto.TiffnerDTO;
 import com.tiff.tffnserachservice.model.Tiffner;
 import com.tiff.tffnserachservice.repository.TiffnerRepository;
+import com.tiff.tffnserachservice.service.TiffnerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tffn-search")
@@ -17,33 +21,39 @@ public class TiffnerController {
     @Autowired
     private TiffnerRepository tiffnerRepository;
 
-    @GetMapping
+    @Autowired
+    private TiffnerService tiffnerService;
+
+    @GetMapping("/tffns")
     public List<Tiffner> findTiffns() {
         return tiffnerRepository.findAll();
     }
 
-    @GetMapping("/api/find-tiffn/{id}")
-    public ResponseEntity<Tiffner> findTffn(@PathVariable Long id) {
-        return tiffnerRepository.findByTiffnerId(id).map(ResponseEntity::ok).orElseThrow();
+    @GetMapping("/tffns/{id}")
+    public Tiffner findTffn(@PathVariable Long id) {
+        return tiffnerRepository.findById(id).get();
     }
 
 
-    @DeleteMapping("/api/delete-tiffn/{id")
-    public Boolean deleteTffn(Long id) {
+    @DeleteMapping("/tffns/{id}")
+    public ResponseEntity<Tiffner> deleteTffn(@PathVariable Long id) {
+        Optional<Tiffner> tiffner = Optional.ofNullable(tiffnerRepository.findByTiffnerId(id).orElseThrow());
 
-        if (tiffnerRepository.findByTiffnerId(id).isPresent()) {
-            tiffnerRepository.delete(tiffnerRepository.findByTiffnerId(id).orElseThrow());
-            return true;
+        if (tiffner.isPresent()) {
+            tiffnerRepository.delete(tiffner.get());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
-        return false;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping()
-    public void addTffn(Tiffner tiffner){
-         tiffnerRepository.save(tiffner);
+    @PostMapping(  consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Tiffner> addTffn(@RequestBody Tiffner tiffner){
+         Tiffner newTiffn = tiffnerRepository.save(tiffner);
+         return new ResponseEntity<Tiffner>(newTiffn, HttpStatus.OK);
     }
 
-    @PutMapping("/api/update-tiffn/{id}")
+    @PutMapping("/tffns/{id}")
     public ResponseEntity<Tiffner> updateTffn(@RequestBody TiffnerDTO tiffnerDTO, Long id){
         Tiffner tiffner = tiffnerRepository.findByTiffnerId(id).orElseThrow();
 
@@ -51,7 +61,6 @@ public class TiffnerController {
         tiffner.setAddress(tiffnerDTO.getAddress());
         tiffner.setTags(tiffnerDTO.getTags());
         tiffner.setContactInformation(tiffnerDTO.getContactInformation());
-        //DO WE NEED TO SET REVIEWS
         tiffner.setReviews(tiffnerDTO.getReviews());
         tiffner.setBusinessHours(tiffnerDTO.getBusinessHours());
         tiffner.setDescription(tiffnerDTO.getDescription());
