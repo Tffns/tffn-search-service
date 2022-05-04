@@ -1,30 +1,23 @@
 package com.tiff.tffnserachservice.model;
 
-import lombok.Data;
+import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="tffns")
+@Table(name="tffn")
 public class Tiffner {
     /*
-        1. Name - String
-        2. Contact Information
-                - phone number
-                - email
-        3. Location - address - String
-        4. Tags - List of String
-        5. Reviews - List of String
-            - comments
-        6. Days of Operation - DATE OBJECT FROM - UNTIL
-            - Days
-            - Hours
-        7. Description - String
-        8. Rating - List of Stars
-        9. Price - 1-4 Integers
-        11. id - generated
         TODO:
             10. thumbnail -  Byte
      */
@@ -40,11 +33,13 @@ public class Tiffner {
 
     private String address;
 
-    @ElementCollection
-    private List<String> tags;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @JoinColumn(name ="tiffner_id")
+    private Set<Tags> tags;
 
-    @ElementCollection
-    private List<String> reviews;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @JoinColumn(name="tiffner_id")
+    private Set<Reviews> reviews;
 
     @Embedded
     private BusinessHours businessHours;
