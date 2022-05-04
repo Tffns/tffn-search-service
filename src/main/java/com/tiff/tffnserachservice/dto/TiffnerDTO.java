@@ -2,9 +2,13 @@ package com.tiff.tffnserachservice.dto;
 
 import com.tiff.tffnserachservice.model.BusinessHours;
 import com.tiff.tffnserachservice.model.ContactInformation;
+import com.tiff.tffnserachservice.model.Reviews;
+import com.tiff.tffnserachservice.model.Tags;
 import lombok.Data;
 
+import javax.swing.text.html.HTML;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class TiffnerDTO {
@@ -15,9 +19,9 @@ public class TiffnerDTO {
 
     private ContactInformation contactInformation;
 
-    private List<String> tags;
+    private Set<Tags> tags;
 
-    private List<String> reviews;
+    private Set<Reviews> reviews;
 
     private BusinessHours businessHours;
 
