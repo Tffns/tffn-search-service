@@ -2,9 +2,12 @@ package com.tiff.tffnserachservice.controller;
 
 
 import com.tiff.tffnserachservice.dto.TiffnerDTO;
+import com.tiff.tffnserachservice.exception.TiffnNotFoundException;
 import com.tiff.tffnserachservice.model.Tiffner;
 import com.tiff.tffnserachservice.repository.TiffnerRepository;
 import com.tiff.tffnserachservice.service.TiffnerService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/tffn-search")
+@Slf4j
 public class TiffnerController {
 
     @Autowired
@@ -37,12 +41,14 @@ public class TiffnerController {
 
     @DeleteMapping("/tffns/{id}")
     public ResponseEntity<Tiffner> deleteTffn(@PathVariable Long id) {
-        Optional<Tiffner> tiffner = Optional.ofNullable(tiffnerRepository.findByTiffnerId(id).orElseThrow());
+        Optional<Tiffner> tiffner = Optional.ofNullable(tiffnerRepository.findByTiffnerId(id).orElseThrow(()->new TiffnNotFoundException(id)));
 
         if (tiffner.isPresent()) {
             tiffnerRepository.delete(tiffner.get());
+            log.info(tiffner.toString() +" was deleted");
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
+        log.error("Tiffin with {}"+id +" does not exist.");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
@@ -50,24 +56,23 @@ public class TiffnerController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Tiffner> addTffn(@RequestBody Tiffner tiffner){
          Tiffner newTiffn = tiffnerRepository.save(tiffner);
+         log.info(tiffner.toString() +" has been added successfully.");
          return new ResponseEntity<Tiffner>(newTiffn, HttpStatus.OK);
     }
 
     @PutMapping("/tffns/{id}")
-    public ResponseEntity<Tiffner> updateTffn(@RequestBody TiffnerDTO tiffnerDTO, Long id){
-        Tiffner tiffner = tiffnerRepository.findByTiffnerId(id).orElseThrow();
+    public ResponseEntity<Tiffner> updateTffn(@RequestBody TiffnerDTO tiffnerDTO, @PathVariable Long id){
+        Optional<Tiffner> tiffner = Optional.ofNullable(tiffnerRepository.findByTiffnerId(id).orElseThrow(()-> new TiffnNotFoundException(id)));
 
-        tiffner.setName(tiffnerDTO.getName());
-        tiffner.setAddress(tiffnerDTO.getAddress());
-        tiffner.setTags(tiffnerDTO.getTags());
-        tiffner.setContactInformation(tiffnerDTO.getContactInformation());
-        tiffner.setReviews(tiffnerDTO.getReviews());
-        tiffner.setBusinessHours(tiffnerDTO.getBusinessHours());
-        tiffner.setDescription(tiffnerDTO.getDescription());
-        tiffner.setPrice(tiffnerDTO.getPrice());
+        if(tiffner.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
-        Tiffner finalTiffner = tiffnerRepository.save(tiffner);
-        return ResponseEntity.ok(finalTiffner);
+        }else{
+            BeanUtils.copyProperties(tiffnerDTO,tiffner.get());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+
+        }
+
         }
     }
 
