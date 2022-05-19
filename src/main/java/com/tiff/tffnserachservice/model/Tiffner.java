@@ -1,13 +1,8 @@
 package com.tiff.tffnserachservice.model;
 
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -16,6 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name="tffn")
+@Builder
 public class Tiffner {
     /*
         TODO:
@@ -33,11 +29,11 @@ public class Tiffner {
 
     private String address;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name ="tiffner_id")
     private Set<Tags> tags;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name="tiffner_id")
     private Set<Reviews> reviews;
 
