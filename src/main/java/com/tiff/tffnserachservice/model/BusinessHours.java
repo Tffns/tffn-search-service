@@ -1,17 +1,17 @@
 package com.tiff.tffnserachservice.model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 import java.sql.Time;
 import java.time.DayOfWeek;
-import java.util.Date;
+
 
 @Getter
 @Setter
 @Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
 public class BusinessHours {
     public DayOfWeek startDay;
     public DayOfWeek endDay;
