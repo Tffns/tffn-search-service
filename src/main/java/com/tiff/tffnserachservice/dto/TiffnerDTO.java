@@ -6,8 +6,6 @@ import com.tiff.tffnserachservice.model.Reviews;
 import com.tiff.tffnserachservice.model.Tags;
 import lombok.Data;
 
-import javax.swing.text.html.HTML;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -30,7 +28,6 @@ public class TiffnerDTO {
     private String rating;
 
     private int price;
-
 
 
 }
